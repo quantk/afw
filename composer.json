@@ -1,0 +1,20 @@
+{
+    "name": "quantick/afw",
+    "description": "Php microframework",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Kladov",
+            "email": "mail@kladov.xyz"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Afw\\": "./src"
+        }
+    },
+    "require": {
+        "symfony/http-foundation": "^4.1"
+    }
+}
