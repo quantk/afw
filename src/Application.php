@@ -12,7 +12,6 @@ namespace Afw;
 
 use Afw\Component\Controller\Resolver\ControllerResolver;
 use Afw\Component\Controller\Resolver\RouteParameters;
-use Afw\Component\Kernel\KernelFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
