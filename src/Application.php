@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 /**
  * Created by PhpStorm.
  * User: quantick
@@ -10,20 +10,17 @@ declare(strict_types = 1);
 namespace Afw;
 
 
-use Afw\Component\Controller\Resolver\ControllerResolver;
 use Afw\Component\Controller\Resolver\ControllerResolverInterface;
 use Afw\Component\Controller\Resolver\RouteParameters;
 use DI\Container;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\RouteCollection;
 
 class Application
 {
+//region SECTION: Fields
     /**
      * @var ContainerInterface|Container
      */
@@ -36,7 +33,9 @@ class Application
      * @var ControllerResolverInterface
      */
     private $controllerResolver;
+//endregion Fields
 
+//region SECTION: Constructor
     /**
      * Application constructor.
      *
@@ -48,13 +47,14 @@ class Application
         UrlMatcherInterface $urlMatcher,
         ControllerResolverInterface $controllerResolver,
         ContainerInterface $container = null
-    )
-    {
-        $this->container = $container ?? new Container();
-        $this->urlMatcher = $urlMatcher;
+    ) {
+        $this->container          = $container ?? new Container();
+        $this->urlMatcher         = $urlMatcher;
         $this->controllerResolver = $controllerResolver;
     }
+//endregion Constructor
 
+//region SECTION: Public
     /**
      * @param Request $request
      *
@@ -63,8 +63,8 @@ class Application
      */
     public function run(Request $request): Response
     {
-        $urlMatcher         = $this->urlMatcher;
-        $params             = $urlMatcher->match($request->getPathInfo());
+        $urlMatcher = $this->urlMatcher;
+        $params     = $urlMatcher->match($request->getPathInfo());
 
         $routeParameters    = new RouteParameters($params);
         $controllerResolver = $this->controllerResolver;
@@ -78,4 +78,5 @@ class Application
 
         return $response;
     }
+//endregion Public
 }
