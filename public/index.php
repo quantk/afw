@@ -16,5 +16,6 @@ try {
     $response = $app->run($request);
     $response->send();
 } catch (\Throwable $e) {
+    /** @noinspection PhpUnhandledExceptionInspection */
     throw $e;
 }
