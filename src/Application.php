@@ -10,28 +10,63 @@ declare(strict_types = 1);
 namespace Afw;
 
 
+use Afw\Component\Controller\Resolver\ControllerResolver;
+use Afw\Component\Controller\Resolver\RouteParameters;
+use Afw\Component\Kernel\KernelFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RouteCollection;
 
 class Application
 {
-    /**
-     * @var Request
-     */
-    private $request;
 
     /**
      * Application constructor.
-     *
-     * @param Request $request
      */
-    public function __construct(Request $request)
+    public function __construct()
     {
-        $this->request = $request;
+
     }
 
-    public function run()
+    /**
+     * @param Request $request
+     *
+     * @return mixed
+     * @throws \ReflectionException
+     */
+    public function run(Request $request)
     {
-        return (new Response('hello, world'))->send();
+        /** @var RouteCollection $routeCollection */
+        $routeCollection = require_once ROOT_DIR.'/app/routes.php';
+        if (!$routeCollection instanceof RouteCollection) {
+            throw new \RuntimeException();
+        }
+        $requestContext     = new RequestContext('/');
+        $urlMatcher         = new UrlMatcher($routeCollection, $requestContext);
+        $params             = $urlMatcher->match($request->getPathInfo());
+        $routeParameters    = new RouteParameters($params);
+        $controllerResolver = new ControllerResolver();
+
+        $controllerObject = $controllerResolver->get($request, $routeParameters);
+        $controller       = $controllerObject->getController();
+        $rMethod          = new \ReflectionMethod($controller, $controllerObject->getAction());
+        $actionParameters = $rMethod->getParameters();
+
+        $params = [];
+        foreach ($actionParameters as $actionParameter) {
+            $parameterName = $actionParameter->getName();
+
+            $paramInRequest = $routeParameters->get($parameterName);
+            if ($paramInRequest) {
+                $params[] = $paramInRequest;
+            }
+        }
+
+        /** @var Response $response */
+        $response = $rMethod->invokeArgs($controller, $params);
+
+        return $response->send();
     }
 }
