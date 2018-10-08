@@ -16,6 +16,14 @@ use Symfony\Component\HttpFoundation\Request;
 interface ControllerResolverInterface
 {
 //region SECTION: Getters/Setters
+    /**
+     * @param Request         $request
+     *
+     * @param RouteParameters $routeParameters
+     *
+     * @return ControllerObject
+     * @throws \ReflectionException
+     */
     public function get(Request $request, RouteParameters $routeParameters);
 //endregion Getters/Setters
 }

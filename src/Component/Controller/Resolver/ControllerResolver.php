@@ -12,24 +12,43 @@ namespace Afw\Component\Controller\Resolver;
 
 
 use Afw\Component\Controller\ControllerInterface;
+use DI\Container;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class ControllerResolver implements ControllerResolverInterface
 {
 //region SECTION: Getters/Setters
     /**
+     * @var ContainerInterface|Container
+     */
+    private $container;
+
+    /**
+     * ControllerResolver constructor.
+     *
+     * @param ContainerInterface $container
+     */
+    public function __construct(
+        ContainerInterface $container
+    )
+    {
+        $this->container = $container;
+    }
+
+
+    /**
      * @param Request         $request
      *
      * @param RouteParameters $routeParameters
      *
      * @return ControllerObject
-     * @throws \ReflectionException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function get(Request $request, RouteParameters $routeParameters)
     {
-        $rController = new \ReflectionClass($routeParameters->getController());
-        /** @var ControllerInterface $controller */
-        $controller = $rController->newInstanceWithoutConstructor();
+        $controller = $this->container->get($routeParameters->getController());
 
         return new ControllerObject($controller, $routeParameters->getControllerMethod());
     }

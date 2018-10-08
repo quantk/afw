@@ -11,22 +11,48 @@ namespace Afw;
 
 
 use Afw\Component\Controller\Resolver\ControllerResolver;
+use Afw\Component\Controller\Resolver\ControllerResolverInterface;
 use Afw\Component\Controller\Resolver\RouteParameters;
+use DI\Container;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 
 class Application
 {
+    /**
+     * @var ContainerInterface|Container
+     */
+    private $container;
+    /**
+     * @var UrlMatcherInterface
+     */
+    private $urlMatcher;
+    /**
+     * @var ControllerResolverInterface
+     */
+    private $controllerResolver;
 
     /**
      * Application constructor.
+     *
+     * @param UrlMatcherInterface         $urlMatcher
+     * @param ControllerResolverInterface $controllerResolver
+     * @param ContainerInterface          $container
      */
-    public function __construct()
+    public function __construct(
+        UrlMatcherInterface $urlMatcher,
+        ControllerResolverInterface $controllerResolver,
+        ContainerInterface $container = null
+    )
     {
-
+        $this->container = $container ?? new Container();
+        $this->urlMatcher = $urlMatcher;
+        $this->controllerResolver = $controllerResolver;
     }
 
     /**
@@ -37,35 +63,18 @@ class Application
      */
     public function run(Request $request): Response
     {
-        /** @var RouteCollection $routeCollection */
-        $routeCollection = require_once ROOT_DIR.'/app/routes.php';
-        if (!$routeCollection instanceof RouteCollection) {
-            throw new \RuntimeException('File routes must return RouteCollection');
-        }
-
-        $requestContext     = new RequestContext('/');
-        $urlMatcher         = new UrlMatcher($routeCollection, $requestContext);
+        $urlMatcher         = $this->urlMatcher;
         $params             = $urlMatcher->match($request->getPathInfo());
+
         $routeParameters    = new RouteParameters($params);
-        $controllerResolver = new ControllerResolver();
+        $controllerResolver = $this->controllerResolver;
 
         $controllerObject = $controllerResolver->get($request, $routeParameters);
         $controller       = $controllerObject->getController();
         $rMethod          = new \ReflectionMethod($controller, $controllerObject->getAction());
-        $actionParameters = $rMethod->getParameters();
-
-        $params = [];
-        foreach ($actionParameters as $actionParameter) {
-            $parameterName = $actionParameter->getName();
-
-            $paramInRequest = $routeParameters->get($parameterName);
-            if ($paramInRequest) {
-                $params[] = $paramInRequest;
-            }
-        }
 
         /** @var Response $response */
-        $response = $rMethod->invokeArgs($controller, $params);
+        $response = $this->container->call($rMethod->getClosure($controller), $params);
 
         return $response;
     }
