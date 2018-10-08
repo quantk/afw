@@ -33,16 +33,17 @@ class Application
     /**
      * @param Request $request
      *
-     * @return mixed
+     * @return Response
      * @throws \ReflectionException
      */
-    public function run(Request $request)
+    public function run(Request $request): Response
     {
         /** @var RouteCollection $routeCollection */
         $routeCollection = require_once ROOT_DIR.'/app/routes.php';
         if (!$routeCollection instanceof RouteCollection) {
-            throw new \RuntimeException();
+            throw new \RuntimeException('File routes must return RouteCollection');
         }
+
         $requestContext     = new RequestContext('/');
         $urlMatcher         = new UrlMatcher($routeCollection, $requestContext);
         $params             = $urlMatcher->match($request->getPathInfo());
@@ -67,6 +68,6 @@ class Application
         /** @var Response $response */
         $response = $rMethod->invokeArgs($controller, $params);
 
-        return $response->send();
+        return $response;
     }
 }
