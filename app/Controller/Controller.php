@@ -12,7 +12,7 @@ namespace App\Controller;
 
 
 use Afw\Component\Controller\ControllerInterface;
-use DI\Annotation\Inject;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,33 +20,33 @@ class Controller implements ControllerInterface
 {
 //region SECTION: Public
     /**
-     * @var string
+     * @var Connection
      */
-    private $dbHost;
+    private $connection;
 
     /**
      * Controller constructor.
-     * @Inject({"db.host"})
-     * @param string $dbHost
+     *
+     * @param Connection $connection
      */
     public function __construct(
-        string $dbHost
+        Connection $connection
     )
     {
-        $this->dbHost = $dbHost;
+        $this->connection = $connection;
     }
 
 
     /**
-     * @param         $name
-     * @param         $age
      * @param Request $request
      *
      * @return Response
      */
-    public function indexAction($name, $age, Request $request)
+    public function indexAction(Request $request)
     {
-        return new Response(sprintf('Hello %s, %s age old', $name, $age));
+        $users = $this->connection->fetchAll("SELECT * FROM users");
+
+        return new Response(sprintf('Hello. Available users: <pre>%s</pre>', json_encode($users, JSON_PRETTY_PRINT)));
     }
 //endregion Public
 }

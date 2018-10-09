@@ -24,7 +24,10 @@
         "symfony/routing": "^4.1",
         "filp/whoops": "^2.2",
         "php-di/php-di": "^6.0",
-        "doctrine/annotations": "^1.6"
+        "doctrine/annotations": "^1.6",
+        "doctrine/dbal": "^2.8",
+        "vlucas/phpdotenv": "^2.5",
+        "ext-json": "*"
     },
     "require-dev": {
         "codeception/codeception": "^2.5"
