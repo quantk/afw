@@ -12,10 +12,13 @@ namespace Afw;
 
 use Afw\Component\Controller\Resolver\ControllerResolverInterface;
 use Afw\Component\Controller\Resolver\RouteParameters;
+use App\Service\ServiceInterface;
 use DI\Container;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 
 class Application
@@ -46,7 +49,7 @@ class Application
     public function __construct(
         UrlMatcherInterface $urlMatcher,
         ControllerResolverInterface $controllerResolver,
-        ContainerInterface $container = null
+        ContainerInterface $container
     ) {
         $this->container          = $container ?? new Container();
         $this->urlMatcher         = $urlMatcher;
@@ -60,11 +63,19 @@ class Application
      *
      * @return Response
      * @throws \ReflectionException
+     * @throws \DI\DependencyException
      */
     public function run(Request $request): Response
     {
+        $this->container->injectOn($request);
+
         $urlMatcher = $this->urlMatcher;
-        $params     = $urlMatcher->match($request->getPathInfo());
+
+        try {
+            $params     = $urlMatcher->match($request->getPathInfo());
+        } catch (ResourceNotFoundException $notFoundException) {
+            return new Response('Page not found',404);
+        }
 
         $routeParameters    = new RouteParameters($params);
         $controllerResolver = $this->controllerResolver;
@@ -73,10 +84,7 @@ class Application
         $controller       = $controllerObject->getController();
         $rMethod          = new \ReflectionMethod($controller, $controllerObject->getAction());
 
-        /** @var Response $response */
-        $response = $this->container->call($rMethod->getClosure($controller), $params);
-
-        return $response;
+        return $this->container->call($rMethod->getClosure($controller), $params);
     }
 //endregion Public
 }

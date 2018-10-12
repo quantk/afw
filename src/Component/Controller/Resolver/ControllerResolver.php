@@ -48,7 +48,7 @@ class ControllerResolver implements ControllerResolverInterface
      */
     public function get(Request $request, RouteParameters $routeParameters)
     {
-        $controller = $this->container->get($routeParameters->getController());
+        $controller = $this->container->make($routeParameters->getController());
 
         return new ControllerObject($controller, $routeParameters->getControllerMethod());
     }

@@ -12,18 +12,21 @@ namespace App\Controller;
 
 
 use Afw\Component\Controller\ControllerInterface;
+use App\Service\ServiceInterface;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class Controller implements ControllerInterface
 {
-//region SECTION: Public
+//region SECTION: Fields
     /**
      * @var Connection
      */
     private $connection;
+//endregion Fields
 
+//region SECTION: Constructor
     /**
      * Controller constructor.
      *
@@ -31,20 +34,22 @@ class Controller implements ControllerInterface
      */
     public function __construct(
         Connection $connection
-    )
-    {
+    ) {
         $this->connection = $connection;
     }
+//endregion Constructor
 
-
+//region SECTION: Public
     /**
-     * @param Request $request
+     * @param Request          $request
+     *
+     * @param ServiceInterface $service
      *
      * @return Response
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, ServiceInterface $service)
     {
-        $users = $this->connection->fetchAll("SELECT * FROM users");
+        $users = $this->connection->fetchAll('SELECT * FROM users');
 
         return new Response(sprintf('Hello. Available users: <pre>%s</pre>', json_encode($users, JSON_PRETTY_PRINT)));
     }
