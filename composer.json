@@ -12,8 +12,7 @@
     "autoload": {
         "psr-4": {
             "Afw\\": "./src",
-            "App\\": "./app",
-            "Util\\": "./util"
+            "App\\": "./app"
         }
     },
     "scripts": {

@@ -12,10 +12,8 @@ namespace Afw;
 
 use Afw\Component\Controller\Resolver\ControllerResolverInterface;
 use Afw\Component\Controller\Resolver\RouteParameters;
-use App\Service\ServiceInterface;
 use DI\Container;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -51,7 +49,7 @@ class Application
         ControllerResolverInterface $controllerResolver,
         ContainerInterface $container
     ) {
-        $this->container          = $container ?? new Container();
+        $this->container          = $container;
         $this->urlMatcher         = $urlMatcher;
         $this->controllerResolver = $controllerResolver;
     }
@@ -67,7 +65,7 @@ class Application
      */
     public function run(Request $request): Response
     {
-        $this->container->injectOn($request);
+        $this->container->set(Request::class, $request);
 
         $urlMatcher = $this->urlMatcher;
 
