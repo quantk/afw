@@ -26,7 +26,8 @@
         "doctrine/annotations": "^1.6",
         "doctrine/dbal": "^2.8",
         "vlucas/phpdotenv": "^2.5",
-        "ext-json": "*"
+        "ext-json": "*",
+        "twig/twig": "^2.5"
     },
     "require-dev": {
         "codeception/codeception": "^2.5"

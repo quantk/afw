@@ -12,6 +12,7 @@ namespace App\Controller;
 
 
 use Afw\Component\Controller\ControllerInterface;
+use Afw\Component\Templater\RendererInterface;
 use App\Service\ServiceInterface;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,18 +25,25 @@ class Controller implements ControllerInterface
      * @var Connection
      */
     private $connection;
+    /**
+     * @var RendererInterface
+     */
+    private $renderer;
 //endregion Fields
 
 //region SECTION: Constructor
     /**
      * Controller constructor.
      *
-     * @param Connection $connection
+     * @param Connection        $connection
+     * @param RendererInterface $renderer
      */
     public function __construct(
-        Connection $connection
+        Connection $connection,
+        RendererInterface $renderer
     ) {
         $this->connection = $connection;
+        $this->renderer = $renderer;
     }
 //endregion Constructor
 
@@ -49,9 +57,7 @@ class Controller implements ControllerInterface
      */
     public function indexAction(Request $request, ServiceInterface $service)
     {
-        $users = $this->connection->fetchAll('SELECT * FROM users');
-
-        return new Response(sprintf('Hello. Available users: <pre>%s</pre>', json_encode($users, JSON_PRETTY_PRINT)));
+        return $this->renderer->render('index.html.twig');
     }
 //endregion Public
 }

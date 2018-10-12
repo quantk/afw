@@ -16,7 +16,7 @@ final class ConfigProvider implements ServiceProviderInterface
 
     public function getDefinitions(): array
     {
-        $configDir               = ROOT_DIR.'config';
+        $configDir               = implode(DIRECTORY_SEPARATOR, [ROOT_DIR,'config']);
         $configFiles       = scandir($configDir, SCANDIR_SORT_NONE);
         $configDefinitions = [];
         foreach ($configFiles as $config) {

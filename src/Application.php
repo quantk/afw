@@ -22,6 +22,9 @@ use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 class Application
 {
 //region SECTION: Fields
+    public const DEVELOMPMENT_MODE = 'dev';
+    public const PRODUCTION_MODE = 'prod';
+
     /**
      * @var ContainerInterface|Container
      */
@@ -82,7 +85,9 @@ class Application
         $controller       = $controllerObject->getController();
         $rMethod          = new \ReflectionMethod($controller, $controllerObject->getAction());
 
-        return $this->container->call($rMethod->getClosure($controller), $params);
+        $controllerResult = $this->container->call($rMethod->getClosure($controller), $params);
+
+        return $controllerResult instanceof Response ? $controllerResult : new Response($controllerResult);
     }
 //endregion Public
 }

@@ -1,11 +1,13 @@
 <?php
 declare(strict_types=1);
 
+use Afw\Component\Util\Env;
+
 return [
     'connection'  => 'default',
     'connections' => [
         'default' => [
-            'url' => getenv('DATABASE_URL'),
+            'url' => Env::get('DATABASE_URL'),
         ],
     ],
 ];

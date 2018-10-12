@@ -4,7 +4,7 @@ declare(strict_types = 1);
 use App\Service\ServiceInterface;
 
 require_once __DIR__.'/../vendor/autoload.php';
-define('ROOT_DIR', __DIR__.'/../');
+define('ROOT_DIR', __DIR__.'/..');
 define('CONFIG_DIR', ROOT_DIR.'/config');
 
 $dotenv = new Dotenv\Dotenv(ROOT_DIR);
@@ -22,7 +22,8 @@ try {
     $coreProviders = [
         \Afw\Component\Container\Provider\CoreProvider::class,
         \Afw\Component\Container\Provider\DatabaseProvider::class,
-        \Afw\Component\Container\Provider\ConfigProvider::class
+        \Afw\Component\Container\Provider\ConfigProvider::class,
+        \Afw\Component\Container\Provider\ParametersProvider::class
     ];
 
     $container = $containerBootstrap->buildContainer(...$coreProviders, ...$providers);
