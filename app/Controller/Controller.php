@@ -57,7 +57,7 @@ class Controller implements ControllerInterface
      */
     public function indexAction(Request $request, ServiceInterface $service)
     {
-        return $this->renderer->render('index.html.twig');
+        return $this->renderer->render('base.html.twig');
     }
 //endregion Public
 }

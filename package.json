@@ -1,0 +1,39 @@
+{
+  "name": "itnote",
+  "version": "0.0.1",
+  "private": false,
+  "description": "",
+  "main": "main.ts",
+  "scripts": {
+    "build": "webpack",
+    "dev": "webpack --watch -d",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Alexander Kladov",
+    "url": "https://github.com/drumser"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "element-ui": "^2.4.8",
+    "vue": "^2.5.17",
+    "vue-class-component": "^6.2.0",
+    "vue-property-decorator": "^7.2.0",
+    "vue-router": "^3.0.1"
+  },
+  "devDependencies": {
+    "css-loader": "^1.0.0",
+    "file-loader": "^2.0.0",
+    "node-sass": "^4.9.4",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.0",
+    "ts-loader": "^5.2.1",
+    "typescript": "^3.1.1",
+    "typings-for-css-modules-loader": "^1.7.0",
+    "vue-loader": "^15.4.2",
+    "vue-template-compiler": "^2.5.17",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2"
+  }
+}
