@@ -1,45 +1,13 @@
 <?php
 declare(strict_types = 1);
 
-use App\Service\ServiceInterface;
-
-require_once __DIR__.'/../vendor/autoload.php';
-define('ROOT_DIR', __DIR__.'/..');
-define('CONFIG_DIR', ROOT_DIR.'/config');
-
-$dotenv = new Dotenv\Dotenv(ROOT_DIR);
-$dotenv->load();
-
-if (\Afw\Component\Util\Env::get('APP_ENV') === \Afw\Application::PRODUCTION_MODE) {
-    ini_set("display_errors", 0);
-    ini_set("log_errors", 1);
-
-    ini_set("error_log", "syslog");
-}
-
-$whoops = new \Whoops\Run;
-$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
-$whoops->register();
-
 try {
-    $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
-    $containerBootstrap = new \Afw\Component\Container\ContainerBootstrap(new \DI\ContainerBuilder());
-    $providers = require CONFIG_DIR.DIRECTORY_SEPARATOR.'providers.php';
-
-    $coreProviders = [
-        \Afw\Component\Container\Provider\CoreProvider::class,
-        \Afw\Component\Container\Provider\DatabaseProvider::class,
-        \Afw\Component\Container\Provider\ConfigProvider::class,
-        \Afw\Component\Container\Provider\ParametersProvider::class
-    ];
-
-    $container = $containerBootstrap->buildContainer(...$coreProviders, ...$providers);
-
-    $service = $container->get(ServiceInterface::class);
+    $container = require_once './bootstrap.php';
 
     /** @var \Afw\Application $app */
     $app = $container->get(\Afw\Application::class);
 
+    $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
     $response = $app->run($request);
     $response->send();
 } catch (\Throwable $e) {

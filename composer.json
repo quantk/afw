@@ -27,7 +27,8 @@
         "doctrine/dbal": "^2.8",
         "vlucas/phpdotenv": "^2.5",
         "ext-json": "*",
-        "twig/twig": "^2.5"
+      "twig/twig": "^2.5",
+      "symfony/filesystem": "^4.1"
     },
     "require-dev": {
         "codeception/codeception": "^2.5"
