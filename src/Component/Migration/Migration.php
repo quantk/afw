@@ -42,15 +42,8 @@ abstract class Migration
 
     public function execute()
     {
-        $this->connection->beginTransaction();
-        try {
-            foreach ($this->statements as $statement) {
-                $this->connection->exec($statement);
-            }
-            $this->connection->commit();
-        } catch (\Throwable $e) {
-            $this->connection->rollBack();
-            $this->output->writeln($e);
+        foreach ($this->statements as $statement) {
+            $this->connection->exec($statement);
         }
     }
 }

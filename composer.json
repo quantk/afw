@@ -28,7 +28,8 @@
         "vlucas/phpdotenv": "^2.5",
         "ext-json": "*",
       "twig/twig": "^2.5",
-      "symfony/filesystem": "^4.1"
+      "symfony/filesystem": "^4.1",
+      "nette/php-generator": "^3.2"
     },
     "require-dev": {
         "codeception/codeception": "^2.5"

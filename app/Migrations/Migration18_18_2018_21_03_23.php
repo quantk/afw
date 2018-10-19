@@ -1,18 +1,9 @@
 <?php
 declare(strict_types=1);
-/**
- * Created by PhpStorm.
- * User: quantick
- * Date: 18.10.2018
- * Time: 12:27
- */
 
 namespace App\Migrations;
 
-
-use Afw\Component\Migration\Migration;
-
-class FirstMigration extends Migration
+class Migration18_18_2018_21_03_23 extends \Afw\Component\Migration\Migration
 {
     public function up()
     {
@@ -41,6 +32,7 @@ class FirstMigration extends Migration
             ;
         ");
     }
+
 
     public function down()
     {

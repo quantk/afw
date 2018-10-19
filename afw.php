@@ -14,6 +14,7 @@ $container = require_once './public/bootstrap.php';
 
 $application = new Application();
 $application->add($container->make(\Afw\Component\Migration\Console\MigrateCommand::class));
+$application->add($container->make(\Afw\Component\Migration\Console\CreateCommand::class));
 
 /** @noinspection PhpUnhandledExceptionInspection */
 $application->run();

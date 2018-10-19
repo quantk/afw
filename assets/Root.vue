@@ -23,7 +23,6 @@
                                         :key="subIndex.toString()"
                                         :index="subRoute.path"
                                         :route="subRoute"
-                                        v-if="$auth.isGranted(user, subRoute.role)"
                                 >
                                     <i :class="subRoute.icon"></i>
                                     <span>{{subRoute.title}}</span>
@@ -51,7 +50,7 @@
 </template>
 
 <script lang="ts">
-    import {Vue, Component} from 'vue-property-decorator';
+    import {Component, Vue} from 'vue-property-decorator';
     import {routes} from './router';
 
     @Component
