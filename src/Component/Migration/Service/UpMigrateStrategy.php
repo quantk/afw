@@ -16,19 +16,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class UpMigrateStrategy extends AbstractMigrationStrategy implements MigrateStrategyInterface
 {
-
-
-    public function do(): void
-    {
-
-    }
-
-
+    /**
+     * @param array $versions
+     * @return array
+     */
     public function prepareVersions(array $versions): array
     {
         return $versions;
     }
 
+    /**
+     * @param string $migrationClass
+     * @param array $versions
+     * @return bool
+     */
     public function needToExecute(string $migrationClass, array $versions): bool
     {
         if (in_array($migrationClass, $versions)) {

@@ -16,8 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 interface MigrateStrategyInterface
 {
-    public function do(): void;
-
     public function getMode(): Mode;
 
     public function prepareVersions(array $versions): array;

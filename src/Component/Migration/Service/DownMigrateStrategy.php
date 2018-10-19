@@ -16,16 +16,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class DownMigrateStrategy extends AbstractMigrationStrategy implements MigrateStrategyInterface
 {
-    public function do(): void
-    {
-        // TODO: Implement do() method.
-    }
-
+    /**
+     * @param array $versions
+     * @return array
+     */
     public function prepareVersions(array $versions): array
     {
         return array_reverse($versions);
     }
 
+    /**
+     * @param string $migrationClass
+     * @param array $versions
+     * @return bool
+     */
     public function needToExecute(string $migrationClass, array $versions): bool
     {
         if (empty($versions)) {
