@@ -57,6 +57,7 @@ $containerBootstrap = new \Afw\Component\Container\ContainerBootstrap(new \DI\Co
 $providers = require CONFIG_DIR . DIRECTORY_SEPARATOR . 'providers.php';
 
 $coreProviders = [
+    \Afw\Component\Container\Provider\LoggerProvider::class,
     \Afw\Component\Container\Provider\CoreProvider::class,
     \Afw\Component\Container\Provider\DatabaseProvider::class,
     \Afw\Component\Container\Provider\ConfigProvider::class,

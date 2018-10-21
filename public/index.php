@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 
 try {
+    /** @var \DI\Container $container */
     $container = require_once './bootstrap.php';
+    $logger = $container->get(\Psr\Log\LoggerInterface::class);
 
     /** @var \Afw\Application $app */
     $app = $container->get(\Afw\Application::class);
