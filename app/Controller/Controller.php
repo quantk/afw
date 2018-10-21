@@ -12,7 +12,6 @@ namespace App\Controller;
 
 
 use Afw\Component\Controller\ControllerInterface;
-use Afw\Component\Filesystem\Filesystem;
 use Afw\Component\Templater\RendererInterface;
 use App\Service\ServiceInterface;
 use Doctrine\DBAL\Connection;
@@ -58,7 +57,6 @@ class Controller implements ControllerInterface
      */
     public function indexAction(Request $request, ServiceInterface $service)
     {
-        $classes = Filesystem::getClassesFromDirectory(ROOT_DIR . '/app/Migrations');
         return $this->renderer->render('base.html.twig');
     }
 //endregion Public
