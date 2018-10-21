@@ -11,19 +11,18 @@ declare(strict_types=1);
 namespace Afw\Component\Controller\Resolver;
 
 
-use Symfony\Component\HttpFoundation\Request;
+use Psr\Http\Message\RequestInterface;
 
 interface ControllerResolverInterface
 {
 //region SECTION: Getters/Setters
     /**
-     * @param Request         $request
+     * @param RequestInterface $request
      *
      * @param RouteParameters $routeParameters
      *
      * @return ControllerObject
-     * @throws \ReflectionException
      */
-    public function get(Request $request, RouteParameters $routeParameters);
+    public function get(RequestInterface $request, RouteParameters $routeParameters);
 //endregion Getters/Setters
 }

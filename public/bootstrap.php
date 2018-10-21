@@ -40,7 +40,6 @@ if (!is_cli()) {
     $whoops->register();
 }
 
-
 define('ROOT_DIR', __DIR__ . '/..');
 define('CONFIG_DIR', ROOT_DIR . '/config');
 
@@ -48,8 +47,8 @@ $dotenv = new Dotenv\Dotenv(ROOT_DIR);
 $dotenv->load();
 
 if (\Afw\Component\Util\Env::get('APP_ENV') === \Afw\Application::PRODUCTION_MODE) {
-    ini_set("display_errors", 0);
-    ini_set("log_errors", 1);
+    ini_set("display_errors", '0');
+    ini_set("log_errors", '1');
 
     ini_set("error_log", "syslog");
 }

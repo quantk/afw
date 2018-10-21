@@ -14,10 +14,11 @@ use Afw\Component\Controller\Resolver\ControllerResolverInterface;
 use Afw\Component\Controller\Resolver\RouteParameters;
 use DI\Container;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
+use Zend\Diactoros\Response\HtmlResponse;
 
 class Application
 {
@@ -60,22 +61,21 @@ class Application
 
 //region SECTION: Public
     /**
-     * @param Request $request
+     * @param RequestInterface $request
      *
-     * @return Response
+     * @return \Zend\Diactoros\Response
      * @throws \ReflectionException
-     * @throws \DI\DependencyException
      */
-    public function run(Request $request): Response
+    public function run(RequestInterface $request): \Zend\Diactoros\Response
     {
-        $this->container->set(Request::class, $request);
+        $this->container->set(RequestInterface::class, $request);
 
         $urlMatcher = $this->urlMatcher;
 
         try {
-            $params     = $urlMatcher->match($request->getPathInfo());
+            $params = $urlMatcher->match($request->getUri()->getPath());
         } catch (ResourceNotFoundException $notFoundException) {
-            return new Response('Page not found',404);
+            return new \Zend\Diactoros\Response('Page not found', 404);
         }
 
         $routeParameters    = new RouteParameters($params);
@@ -87,7 +87,7 @@ class Application
 
         $controllerResult = $this->container->call($rMethod->getClosure($controller), $params);
 
-        return $controllerResult instanceof Response ? $controllerResult : new Response($controllerResult);
+        return $controllerResult instanceof ResponseInterface ? $controllerResult : new HtmlResponse($controllerResult);
     }
 //endregion Public
 }

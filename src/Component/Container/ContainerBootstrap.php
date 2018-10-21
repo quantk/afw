@@ -11,7 +11,9 @@ declare(strict_types=1);
 namespace Afw\Component\Container;
 
 
+use Afw\Application;
 use Afw\Component\Container\Provider\ServiceProviderInterface;
+use Afw\Component\Util\Env;
 use DI\Container;
 use DI\ContainerBuilder;
 
@@ -82,6 +84,11 @@ final class ContainerBootstrap
     final public function buildContainer(...$providers): Container
     {
         $this->boot($providers);
+
+        if (Application::PRODUCTION_MODE === Env::get('APP_ENV')) {
+            $this->builder->enableCompilation(ROOT_DIR . '/var/cache/container/compilation');
+            $this->builder->writeProxiesToFile(true, __DIR__ . '/var/cache/container/proxy');
+        }
 
         return $this->builder->build();
     }
