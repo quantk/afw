@@ -23,9 +23,7 @@ class RouteParameters
     /**
      * RouteParameters constructor.
      *
-     * @param $controllerAction
-     * @param $controllerMethod
-     * @param $allParameters
+     * @param array $params
      */
     public function __construct(array $params = [])
     {

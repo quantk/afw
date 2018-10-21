@@ -26,8 +26,8 @@ final class TwigRenderer implements RendererInterface
     }
 
     /**
-     * @param string $name    | Template name
-     * @param array  $context | Template vars
+     * @param string $name | Template name
+     * @param array $context | Template vars
      *
      * @return mixed
      * @throws \Twig_Error_Loader

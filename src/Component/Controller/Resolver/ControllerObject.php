@@ -31,7 +31,7 @@ class ControllerObject
      * ControllerObject constructor.
      *
      * @param ControllerInterface $controller
-     * @param string              $action
+     * @param string $action
      */
     public function __construct(ControllerInterface $controller, string $action)
     {

@@ -15,6 +15,11 @@
       "App\\": "./app"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "./tests"
+    }
+  },
   "scripts": {
     "test": "./vendor/bin/codecept run unit"
   },
