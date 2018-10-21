@@ -35,14 +35,11 @@ class Controller implements ControllerInterface
     /**
      * Controller constructor.
      *
-     * @param Connection        $connection
      * @param RendererInterface $renderer
      */
     public function __construct(
-        Connection $connection,
         RendererInterface $renderer
     ) {
-        $this->connection = $connection;
         $this->renderer = $renderer;
     }
 //endregion Constructor
