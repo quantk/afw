@@ -11,7 +11,6 @@ namespace Afw\Component\Migration;
 
 
 use Doctrine\DBAL\Connection;
-use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class Migration
 {
@@ -20,15 +19,10 @@ abstract class Migration
      * @var Connection
      */
     private $connection;
-    /**
-     * @var OutputInterface
-     */
-    private $output;
 
-    public function __construct(Connection $connection, OutputInterface $output)
+    public function __construct(Connection $connection)
     {
         $this->connection = $connection;
-        $this->output = $output;
     }
 
     abstract public function up();

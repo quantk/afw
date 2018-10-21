@@ -13,7 +13,6 @@ namespace Afw\Component\Migration\Service;
 use Afw\Component\Migration\Migration;
 use Doctrine\DBAL\ParameterType;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\HttpFoundation\File\File;
 
 class NextMigrationStrategy extends AbstractMigrationStrategy implements MigrateStrategyInterface
 {
@@ -31,22 +30,20 @@ class NextMigrationStrategy extends AbstractMigrationStrategy implements Migrate
      * @param OutputInterface $output
      * @throws \Doctrine\DBAL\ConnectionException
      * @throws \Doctrine\DBAL\DBALException
+     * @throws \ReflectionException
      */
     public function execute(array $versions, OutputInterface $output): void
     {
         $executedMigrations = 0;
-        $migrations = $this->getMigrations();
-        foreach ($migrations as $migration) {
-            $file = new File($this->getMigrationsPath() . DIRECTORY_SEPARATOR . $migration);
-            $className = $this->getClassNameFromFile($file);
-
+        $migrationClasses = $this->getMigrations();
+        foreach ($migrationClasses as $className) {
             if (false === $this->needToExecute($className, $versions)) {
                 continue;
             }
 
             $migrationClass = "\\App\\Migrations\\${className}";
             /** @var Migration $migration */
-            $migration = new $migrationClass($this->getConnection(), $output);
+            $migration = $this->getReflector()->initialize($migrationClass, [$this->getConnection()]);
 
             $migration->up();
             $connection = $this->getConnection();

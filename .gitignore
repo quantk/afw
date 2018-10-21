@@ -8,3 +8,5 @@
 !/var/logs/.gitkeep
 
 /node_modules
+
+/phpunit.xml

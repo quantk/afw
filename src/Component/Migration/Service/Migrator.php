@@ -40,19 +40,16 @@ final class Migrator
      * Migrator constructor.
      * @param MigrateStrategyInterface $strategy
      * @param Connection $connection
-     * @param string $migrationsPath
      * @param OutputInterface $output
      */
     public function __construct(
         MigrateStrategyInterface $strategy,
         Connection $connection,
-        OutputInterface $output,
-        ?string $migrationsPath = null
+        OutputInterface $output
     )
     {
         $this->strategy = $strategy;
         $this->connection = $connection;
-        $this->migrationsPath = $migrationsPath ?? implode(DIRECTORY_SEPARATOR, [ROOT_DIR, 'app', 'Migrations']);
         $this->output = $output;
     }
 

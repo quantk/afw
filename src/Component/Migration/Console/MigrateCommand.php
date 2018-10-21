@@ -10,9 +10,11 @@ declare(strict_types=1);
 namespace Afw\Component\Migration\Console;
 
 
+use Afw\Component\Filesystem\Filesystem;
 use Afw\Component\Migration\Mode;
 use Afw\Component\Migration\Service\MigrationStrategyFactory;
 use Afw\Component\Migration\Service\Migrator;
+use Afw\Component\Reflection\Reflector;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -31,21 +33,35 @@ final class MigrateCommand extends Command
      * @var MigrationStrategyFactory
      */
     private $migrationStrategyFactory;
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+    /**
+     * @var Reflector
+     */
+    private $reflector;
 
     /**
      * MigrateCommand constructor.
      * @param Connection $connection
      * @param MigrationStrategyFactory $migrationStrategyFactory
+     * @param Filesystem $filesystem
+     * @param Reflector $reflector
      */
     public function __construct(
         Connection $connection,
-        MigrationStrategyFactory $migrationStrategyFactory
+        MigrationStrategyFactory $migrationStrategyFactory,
+        Filesystem $filesystem,
+        Reflector $reflector
     )
     {
         parent::__construct();
 
         $this->connection = $connection;
         $this->migrationStrategyFactory = $migrationStrategyFactory;
+        $this->filesystem = $filesystem;
+        $this->reflector = $reflector;
     }
 
     protected function configure()
@@ -67,7 +83,7 @@ final class MigrateCommand extends Command
     {
         $mode = new Mode($input->getArgument('mode'));
         $migrationsPath = implode(DIRECTORY_SEPARATOR, [ROOT_DIR, 'app', 'Migrations']);
-        $strategy = $this->migrationStrategyFactory->create($mode, $this->connection, $migrationsPath);
+        $strategy = $this->migrationStrategyFactory->create($mode, $this->connection, $this->filesystem, $this->reflector, $migrationsPath);
         $migrator = new Migrator($strategy, $this->connection, $output);
 
         $migrator->migrate();

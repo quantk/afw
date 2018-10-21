@@ -29,6 +29,7 @@ class PrevMigrationStrategy extends AbstractMigrationStrategy implements Migrate
      * @param array $versions
      * @param OutputInterface $output
      * @throws \Doctrine\DBAL\ConnectionException
+     * @throws \ReflectionException
      */
     public function execute(array $versions, OutputInterface $output): void
     {
@@ -41,7 +42,7 @@ class PrevMigrationStrategy extends AbstractMigrationStrategy implements Migrate
         $migrationClass = "\\App\\Migrations\\{$prevMigrationVersion}";
 
         /** @var Migration $migration */
-        $migration = new $migrationClass($this->getConnection(), $output);
+        $migration = $this->getReflector()->initialize($migrationClass, [$this->getConnection()]);
 
         $migration->down();
         $connection = $this->getConnection();

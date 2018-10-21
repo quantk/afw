@@ -1,37 +1,38 @@
 {
-    "name": "quantick/afw",
-    "description": "Php microframework",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Alexander Kladov",
-            "email": "mail@kladov.xyz"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "Afw\\": "./src",
-            "App\\": "./app"
-        }
-    },
-    "scripts": {
-        "test": "./vendor/bin/codecept run unit"
-    },
-    "require": {
-        "symfony/http-foundation": "^4.1",
-        "symfony/routing": "^4.1",
-        "filp/whoops": "^2.2",
-        "php-di/php-di": "^6.0",
-        "doctrine/annotations": "^1.6",
-        "doctrine/dbal": "^2.8",
-        "vlucas/phpdotenv": "^2.5",
-        "ext-json": "*",
-      "twig/twig": "^2.5",
-      "symfony/filesystem": "^4.1",
-      "nette/php-generator": "^3.2"
-    },
-    "require-dev": {
-        "codeception/codeception": "^2.5"
+  "name": "quantick/afw",
+  "description": "Php microframework",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alexander Kladov",
+      "email": "mail@kladov.xyz"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Afw\\": "./src",
+      "App\\": "./app"
+    }
+  },
+  "scripts": {
+    "test": "./vendor/bin/codecept run unit"
+  },
+  "require": {
+    "symfony/http-foundation": "^4.1",
+    "symfony/routing": "^4.1",
+    "filp/whoops": "^2.2",
+    "php-di/php-di": "^6.0",
+    "doctrine/annotations": "^1.6",
+    "doctrine/dbal": "^2.8",
+    "vlucas/phpdotenv": "^2.5",
+    "ext-json": "*",
+    "twig/twig": "^2.5",
+    "symfony/filesystem": "^4.1",
+    "nette/php-generator": "^3.2",
+    "symfony/console": "^4.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.4"
+  }
 }

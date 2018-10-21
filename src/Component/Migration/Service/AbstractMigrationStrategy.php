@@ -10,10 +10,11 @@ declare(strict_types=1);
 namespace Afw\Component\Migration\Service;
 
 
+use Afw\Component\Filesystem\Filesystem;
 use Afw\Component\Migration\Migration;
 use Afw\Component\Migration\Mode;
+use Afw\Component\Reflection\Reflector;
 use Doctrine\DBAL\Connection;
-use Symfony\Component\HttpFoundation\File\File;
 
 abstract class AbstractMigrationStrategy implements MigrateStrategyInterface
 {
@@ -29,22 +30,36 @@ abstract class AbstractMigrationStrategy implements MigrateStrategyInterface
      * @var string
      */
     private $migrationsPath;
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+    /**
+     * @var Reflector
+     */
+    private $reflector;
 
     /**
      * AbstractMigrationStrategy constructor.
      * @param Mode $mode
      * @param Connection $connection
+     * @param Filesystem $filesystem
+     * @param Reflector $reflector
      * @param string $migrationsPath
      */
     final public function __construct(
         Mode $mode,
         Connection $connection,
+        Filesystem $filesystem,
+        Reflector $reflector,
         string $migrationsPath
     )
     {
         $this->mode = $mode;
         $this->connection = $connection;
         $this->migrationsPath = $migrationsPath;
+        $this->filesystem = $filesystem;
+        $this->reflector = $reflector;
     }
 
     /**
@@ -72,6 +87,14 @@ abstract class AbstractMigrationStrategy implements MigrateStrategyInterface
     }
 
     /**
+     * @return Reflector
+     */
+    public function getReflector(): Reflector
+    {
+        return $this->reflector;
+    }
+
+    /**
      * @param Migration $migration
      * @return string
      * @throws \ReflectionException
@@ -86,17 +109,6 @@ abstract class AbstractMigrationStrategy implements MigrateStrategyInterface
      */
     protected function getMigrations(): array
     {
-        $migrations = array_filter(scandir($this->migrationsPath), function ($migrationFile) {
-            return !in_array($migrationFile, ['.', '..']);
-        });
-
-        return array_values($migrations);
-    }
-
-    protected function getClassNameFromFile(File $file)
-    {
-        $filename = $file->getFilename();
-        $pathInfo = pathinfo($filename);
-        return $pathInfo['filename'];
+        return $this->filesystem->getClassesFromDirectory($this->migrationsPath);
     }
 }
