@@ -7,9 +7,18 @@ try {
     /** @var \Afw\Application $app */
     $app = $container->get(\Afw\Application::class);
 
-    $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+    $request = \Zend\Diactoros\ServerRequestFactory::fromGlobals(
+        $_SERVER,
+        $_GET,
+        $_POST,
+        $_COOKIE,
+        $_FILES
+    );
+
+//    $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
     $response = $app->run($request);
-    $response->send();
+
+    sendResponse($response);
 } catch (\Throwable $e) {
     /** @noinspection PhpUnhandledExceptionInspection */
     throw $e;
