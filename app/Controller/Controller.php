@@ -13,10 +13,8 @@ namespace App\Controller;
 
 use Afw\Component\Controller\ControllerInterface;
 use Afw\Component\Templater\RendererInterface;
-use App\Service\ServiceInterface;
 use Doctrine\DBAL\Connection;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Message\RequestInterface;
 
 class Controller implements ControllerInterface
 {
@@ -46,13 +44,10 @@ class Controller implements ControllerInterface
 
 //region SECTION: Public
     /**
-     * @param Request          $request
-     *
-     * @param ServiceInterface $service
-     *
-     * @return Response
+     * @param RequestInterface $request
+     * @return mixed
      */
-    public function indexAction(Request $request, ServiceInterface $service)
+    public function indexAction(RequestInterface $request)
     {
         return $this->renderer->render('base.html.twig');
     }

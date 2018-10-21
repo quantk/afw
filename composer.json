@@ -27,7 +27,6 @@
     "test": "./vendor/bin/codecept run unit"
   },
   "require": {
-    "symfony/http-foundation": "^4.1",
     "symfony/routing": "^4.1",
     "filp/whoops": "^2.2",
     "php-di/php-di": "^6.0",
