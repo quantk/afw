@@ -12,11 +12,12 @@ namespace Afw\Component\Migration;
 
 final class Mode
 {
-    public const UP_MODE = 'up';
-    public const DOWN_MODE = 'down';
-    private $mode = self::UP_MODE;
+    public const NEXT_MODE = 'next';
+    public const PREV_MODE = 'prev';
 
-    private $availableModes = [self::UP_MODE, self::DOWN_MODE];
+    private $mode = self::NEXT_MODE;
+
+    private $availableModes = [self::NEXT_MODE, self::PREV_MODE];
 
     public function __construct(string $mode)
     {

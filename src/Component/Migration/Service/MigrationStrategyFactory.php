@@ -18,16 +18,21 @@ final class MigrationStrategyFactory
     /**
      * @param Mode $mode
      * @param Connection $connection
+     * @param String $migrationsPath
      * @return MigrateStrategyInterface
      */
-    public function create(Mode $mode, Connection $connection): MigrateStrategyInterface
+    public function create(
+        Mode $mode,
+        Connection $connection,
+        String $migrationsPath
+    ): MigrateStrategyInterface
     {
-        if (Mode::UP_MODE === $mode->getMode()) {
-            return new UpMigrateStrategy($mode, $connection);
+        if (Mode::NEXT_MODE === $mode->getMode()) {
+            return new NextMigrationStrategy($mode, $connection, $migrationsPath);
         }
 
-        if (Mode::DOWN_MODE === $mode->getMode()) {
-            return new DownMigrateStrategy($mode, $connection);
+        if (Mode::PREV_MODE === $mode->getMode()) {
+            return new PrevMigrationStrategy($mode, $connection, $migrationsPath);
         }
 
         throw new \RuntimeException('invalid mode');

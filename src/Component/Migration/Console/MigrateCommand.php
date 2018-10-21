@@ -54,7 +54,7 @@ final class MigrateCommand extends Command
             ->setName('db:migration:migrate')
             ->setDescription('Migrate migrates')
             ->setHelp('This command allows you to migrate')
-            ->addArgument('mode', InputOption::VALUE_REQUIRED, 'up or down', self::UP_MODE);
+            ->addArgument('mode', InputOption::VALUE_REQUIRED, 'up or down', Mode::NEXT_MODE);
     }
 
     /**
@@ -66,8 +66,8 @@ final class MigrateCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $mode = new Mode($input->getArgument('mode'));
-
-        $strategy = $this->migrationStrategyFactory->create($mode, $this->connection);
+        $migrationsPath = implode(DIRECTORY_SEPARATOR, [ROOT_DIR, 'app', 'Migrations']);
+        $strategy = $this->migrationStrategyFactory->create($mode, $this->connection, $migrationsPath);
         $migrator = new Migrator($strategy, $this->connection, $output);
 
         $migrator->migrate();

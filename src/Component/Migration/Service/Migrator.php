@@ -10,13 +10,11 @@ declare(strict_types=1);
 namespace Afw\Component\Migration\Service;
 
 
-use Afw\Component\Migration\Migration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Type;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\HttpFoundation\File\File;
 
 final class Migrator
 {
@@ -63,35 +61,15 @@ final class Migrator
      */
     public function migrate(): void
     {
-        $executedMigrations = 0;
         $versions = $this->getVersions();
-        $migrations = $this->getMigrations();
-        foreach ($migrations as $migration) {
-            $file = new File($this->migrationsPath . DIRECTORY_SEPARATOR . $migration);
-            $className = $this->getClassNameFromFile($file);
-
-            if (false === $this->strategy->needToExecute($className, $versions)) {
-                continue;
-            }
-
-            $migrationClass = "\\App\\Migrations\\${className}";
-            /** @var Migration $migration */
-            $migration = new $migrationClass($this->connection, $this->output);
-            $this->strategy->execute($migration, $this->output);
-
-            $executedMigrations++;
-        }
-
-        if (0 === $executedMigrations) {
-            throw new \RuntimeException('Nothing to execute');
-        }
+        $this->strategy->execute($versions, $this->output);
     }
 
     /**
      * @return array
      * @throws \Doctrine\DBAL\DBALException
      */
-    private function getVersions(): array
+    protected function getVersions(): array
     {
         $this->prepareMigrationsTable();
 
@@ -127,25 +105,5 @@ final class Migrator
             $table->addUniqueIndex(['version'], 'version_unique_indx');
             $schemaManager->createTable($table);
         }
-    }
-
-    /**
-     * @return array
-     */
-    private function getMigrations(): array
-    {
-
-        $migrations = array_filter(scandir($this->migrationsPath), function ($migrationFile) {
-            return !in_array($migrationFile, ['.', '..']);
-        });
-
-        return array_values($migrations);
-    }
-
-    private function getClassNameFromFile(File $file)
-    {
-        $filename = $file->getFilename();
-        $pathInfo = pathinfo($filename);
-        return $pathInfo['filename'];
     }
 }

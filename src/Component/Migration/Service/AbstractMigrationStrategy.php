@@ -13,8 +13,9 @@ namespace Afw\Component\Migration\Service;
 use Afw\Component\Migration\Migration;
 use Afw\Component\Migration\Mode;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\HttpFoundation\File\File;
 
-abstract class AbstractMigrationStrategy
+abstract class AbstractMigrationStrategy implements MigrateStrategyInterface
 {
     /**
      * @var Mode
@@ -24,14 +25,34 @@ abstract class AbstractMigrationStrategy
      * @var Connection
      */
     private $connection;
+    /**
+     * @var string
+     */
+    private $migrationsPath;
 
+    /**
+     * AbstractMigrationStrategy constructor.
+     * @param Mode $mode
+     * @param Connection $connection
+     * @param string $migrationsPath
+     */
     final public function __construct(
         Mode $mode,
-        Connection $connection
+        Connection $connection,
+        string $migrationsPath
     )
     {
         $this->mode = $mode;
         $this->connection = $connection;
+        $this->migrationsPath = $migrationsPath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMigrationsPath(): string
+    {
+        return $this->migrationsPath;
     }
 
     /**
@@ -58,5 +79,24 @@ abstract class AbstractMigrationStrategy
     final protected function getBaseMigrationClass(Migration $migration): string
     {
         return (new \ReflectionClass($migration))->getShortName();
+    }
+
+    /**
+     * @return array
+     */
+    protected function getMigrations(): array
+    {
+        $migrations = array_filter(scandir($this->migrationsPath), function ($migrationFile) {
+            return !in_array($migrationFile, ['.', '..']);
+        });
+
+        return array_values($migrations);
+    }
+
+    protected function getClassNameFromFile(File $file)
+    {
+        $filename = $file->getFilename();
+        $pathInfo = pathinfo($filename);
+        return $pathInfo['filename'];
     }
 }
