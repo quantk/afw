@@ -10,9 +10,9 @@ declare(strict_types=1);
 namespace Afw\Component\Migration\Console;
 
 
+use Afw\Component\Console\Command;
 use Afw\Component\Migration\Migration;
 use Nette\PhpGenerator\ClassType;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -35,7 +35,10 @@ final class CreateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $migrationsPath = implode(DIRECTORY_SEPARATOR, [ROOT_DIR, 'app', 'Migrations']);
+        $migrationsPath = $this->getContainer()->get('migration.path');
+        if (null === $migrationsPath) {
+            throw new \RuntimeException('Migration path not set in parameters.php');
+        }
 
         $dateNow = new \DateTimeImmutable();
         $dateString = $dateNow->format('d_j_Y_G_i_s');

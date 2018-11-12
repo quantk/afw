@@ -36,7 +36,6 @@ final class CoreProvider implements ServiceProviderInterface
             \Afw\Component\Controller\Resolver\ControllerResolverInterface::class => function (Container $container) {
                 return $container->get(\Afw\Component\Controller\Resolver\ControllerResolver::class);
             },
-            'root_dir' => ROOT_DIR,
             'env' => Env::get('APP_ENV'),
             'routes'                                                              => function (Container $container) {
                 /** @var RouteCollection $routeCollection */

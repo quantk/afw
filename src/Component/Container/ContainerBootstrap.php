@@ -23,16 +23,22 @@ final class ContainerBootstrap
      * @var ContainerBuilder
      */
     private $builder;
+    /**
+     * @var string
+     */
+    private $rootDir;
 //region SECTION: Constructor
 
     /**
      * ContainerBootstrap constructor.
      *
      * @param ContainerBuilder $builder
+     * @param string $rootDir
      */
-    public function __construct(ContainerBuilder $builder)
+    public function __construct(ContainerBuilder $builder, string $rootDir)
     {
         $this->builder = $builder;
+        $this->rootDir = $rootDir;
     }
 //endregion Constructor
 
@@ -85,9 +91,12 @@ final class ContainerBootstrap
     {
         $this->boot($providers);
 
+        $this->builder->useAutowiring(true);
+        $this->builder->useAnnotations(true);
+
         if (Application::PRODUCTION_MODE === Env::get('APP_ENV')) {
-            $this->builder->enableCompilation(ROOT_DIR . '/var/cache/container/compilation');
-            $this->builder->writeProxiesToFile(true, __DIR__ . '/var/cache/container/proxy');
+            $this->builder->enableCompilation($this->rootDir . '/var/cache/container/compilation');
+            $this->builder->writeProxiesToFile(true, $this->rootDir . '/var/cache/container/proxy');
         }
 
         return $this->builder->build();

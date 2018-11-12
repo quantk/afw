@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 try {
     /** @var \DI\Container $container */
-    $container = require_once './bootstrap.php';
+    $container = require_once '../src/bootstrap.php';
     $logger = $container->get(\Psr\Log\LoggerInterface::class);
 
     /** @var \Afw\Application $app */

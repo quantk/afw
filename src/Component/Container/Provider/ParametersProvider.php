@@ -17,9 +17,11 @@ final class ParametersProvider implements ServiceProviderInterface
     public function getDefinitions(): array
     {
         return [
-            'template.path' => implode(DIRECTORY_SEPARATOR, [ROOT_DIR,'resources','templates']),
-            'routes.path' => implode(DIRECTORY_SEPARATOR, [ROOT_DIR,'app','routes.php']),
-            'cache.renderer.path' => implode(DIRECTORY_SEPARATOR, [ROOT_DIR,'var','cache','renderer']),
+            'root.path' => getRootDir(),
+            'config.path' => getConfigDir(),
+            'template.path' => implode(DIRECTORY_SEPARATOR, [getRootDir(), 'resources', 'templates']),
+            'routes.path' => implode(DIRECTORY_SEPARATOR, [getRootDir(), 'app', 'routes.php']),
+            'cache.renderer.path' => implode(DIRECTORY_SEPARATOR, [getRootDir(), 'var', 'cache', 'renderer']),
         ];
     }
 }

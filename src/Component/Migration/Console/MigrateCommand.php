@@ -10,13 +10,13 @@ declare(strict_types=1);
 namespace Afw\Component\Migration\Console;
 
 
+use Afw\Component\Console\Command;
 use Afw\Component\Filesystem\Filesystem;
 use Afw\Component\Migration\Mode;
 use Afw\Component\Migration\Service\MigrationStrategyFactory;
 use Afw\Component\Migration\Service\Migrator;
 use Afw\Component\Reflection\Reflector;
 use Doctrine\DBAL\Connection;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -82,7 +82,10 @@ final class MigrateCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $mode = new Mode($input->getArgument('mode'));
-        $migrationsPath = implode(DIRECTORY_SEPARATOR, [ROOT_DIR, 'app', 'Migrations']);
+        $migrationsPath = $this->getContainer()->get('migration.path');
+        if (null === $migrationsPath) {
+            throw new \RuntimeException('Migration path not set in parameters.php');
+        }
         $strategy = $this->migrationStrategyFactory->create($mode, $this->connection, $this->filesystem, $this->reflector, $migrationsPath);
         $migrator = new Migrator($strategy, $this->connection, $output);
 

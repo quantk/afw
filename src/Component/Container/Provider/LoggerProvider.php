@@ -22,7 +22,7 @@ final class LoggerProvider implements ServiceProviderInterface
     {
         return [
             LoggerInterface::class => function (Container $container) {
-                $rootDir = $container->get('root_dir');
+                $rootDir = $container->get('root.path');
                 $env = $container->get('env');
                 // create a log channel
                 $log = new Logger('logger');
