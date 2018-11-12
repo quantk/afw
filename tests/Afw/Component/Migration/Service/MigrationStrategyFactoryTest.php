@@ -59,17 +59,17 @@ final class MigrationStrategyFactoryTest extends TestCase
         $property = $rClass->getProperty('mode');
         $property->setAccessible(true);
         $property->setValue($mode, 'fsdfsdf');
-        $strategy = $this->factory->create($mode, $this->connection, $this->filesystem, $this->reflector, '/');
+        $strategy = $this->factory->create($mode, $this->connection, $this->filesystem, $this->reflector, '/', 'App');
     }
 
     public function testCreateNext()
     {
         $mode = new Mode(Mode::NEXT_MODE);
-        $nextStrategy = $this->factory->create($mode, $this->connection, $this->filesystem, $this->reflector, '/');
+        $nextStrategy = $this->factory->create($mode, $this->connection, $this->filesystem, $this->reflector, '/', 'App');
         static::assertInstanceOf(NextMigrationStrategy::class, $nextStrategy);
 
         $mode = new Mode(Mode::PREV_MODE);
-        $prevStrategy = $this->factory->create($mode, $this->connection, $this->filesystem, $this->reflector, '/');
+        $prevStrategy = $this->factory->create($mode, $this->connection, $this->filesystem, $this->reflector, '/', 'App');
         static::assertInstanceOf(PrevMigrationStrategy::class, $prevStrategy);
     }
 

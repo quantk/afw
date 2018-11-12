@@ -94,6 +94,6 @@ final class PrevMigrationStrategyTest extends TestCase
         $this->filesystem = $this->createMock(Filesystem::class);
         $this->reflector = $this->createMock(Reflector::class);
 
-        $this->strategy = new PrevMigrationStrategy($mode, $this->connection, $this->filesystem, $this->reflector, '/');
+        $this->strategy = new PrevMigrationStrategy($mode, $this->connection, $this->filesystem, $this->reflector, '/', 'App');
     }
 }
