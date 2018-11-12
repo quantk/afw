@@ -7,7 +7,6 @@ try {
     /** @var \DI\Container $container */
     $rootDir = './';
     $container = require_once '../src/bootstrap.php';
-    $logger = $container->get(\Psr\Log\LoggerInterface::class);
 
     /** @var \Afw\Application $app */
     $app = $container->get(\Afw\Application::class);
@@ -20,7 +19,6 @@ try {
         $_FILES
     );
 
-//    $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
     $response = $app->run($request);
 
     sendResponse($response);
