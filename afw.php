@@ -10,7 +10,9 @@ declare(strict_types=1);
 
 use Symfony\Component\Console\Application;
 
-$container = require_once './public/bootstrap.php';
+require_once './vendor/autoload.php';
+
+$container = require_once './src/bootstrap.php';
 
 $application = new Application();
 $application->add($container->make(\Afw\Component\Migration\Console\MigrateCommand::class));

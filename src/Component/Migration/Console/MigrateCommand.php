@@ -86,7 +86,18 @@ final class MigrateCommand extends Command
         if (null === $migrationsPath) {
             throw new \RuntimeException('Migration path not set in parameters.php');
         }
-        $strategy = $this->migrationStrategyFactory->create($mode, $this->connection, $this->filesystem, $this->reflector, $migrationsPath);
+        $migrationsNamespace = $this->getContainer()->get('migration.namespace');
+        if (null === $migrationsNamespace) {
+            throw new \RuntimeException('Migration namespace not set in parameters.php');
+        }
+        $strategy = $this->migrationStrategyFactory->create(
+            $mode,
+            $this->connection,
+            $this->filesystem,
+            $this->reflector,
+            $migrationsPath,
+            $migrationsNamespace
+        );
         $migrator = new Migrator($strategy, $this->connection, $output);
 
         $migrator->migrate();

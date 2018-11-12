@@ -11,4 +11,5 @@ return [
     'migration.path' => function (\Afw\Kernel $kernel) {
         return implode(DIRECTORY_SEPARATOR, [$kernel->getRootDir(), 'app', 'Migrations']);
     },
+    'migration.namespace' => 'App\Migrations'
 ];

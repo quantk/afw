@@ -41,7 +41,7 @@ class NextMigrationStrategy extends AbstractMigrationStrategy implements Migrate
                 continue;
             }
 
-            $migrationClass = "\\App\\Migrations\\${className}";
+            $migrationClass = implode(DIRECTORY_SEPARATOR, [$this->getMigrationNamespace(), $className]);
             /** @var Migration $migration */
             $migration = $this->getReflector()->initialize($migrationClass, [$this->getConnection()]);
 

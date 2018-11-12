@@ -1,8 +1,11 @@
 <?php
 declare(strict_types = 1);
 
+require_once '../vendor/autoload.php';
+
 try {
     /** @var \DI\Container $container */
+    $rootDir = './';
     $container = require_once '../src/bootstrap.php';
     $logger = $container->get(\Psr\Log\LoggerInterface::class);
 

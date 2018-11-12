@@ -38,6 +38,10 @@ abstract class AbstractMigrationStrategy implements MigrateStrategyInterface
      * @var Reflector
      */
     private $reflector;
+    /**
+     * @var string
+     */
+    private $migrationNamespace;
 
     /**
      * AbstractMigrationStrategy constructor.
@@ -46,13 +50,15 @@ abstract class AbstractMigrationStrategy implements MigrateStrategyInterface
      * @param Filesystem $filesystem
      * @param Reflector $reflector
      * @param string $migrationsPath
+     * @param string $migrationNamespace
      */
     final public function __construct(
         Mode $mode,
         Connection $connection,
         Filesystem $filesystem,
         Reflector $reflector,
-        string $migrationsPath
+        string $migrationsPath,
+        string $migrationNamespace
     )
     {
         $this->mode = $mode;
@@ -60,6 +66,15 @@ abstract class AbstractMigrationStrategy implements MigrateStrategyInterface
         $this->migrationsPath = $migrationsPath;
         $this->filesystem = $filesystem;
         $this->reflector = $reflector;
+        $this->migrationNamespace = $migrationNamespace;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMigrationNamespace(): string
+    {
+        return $this->migrationNamespace;
     }
 
     /**

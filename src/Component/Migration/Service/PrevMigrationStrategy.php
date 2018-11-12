@@ -39,7 +39,7 @@ class PrevMigrationStrategy extends AbstractMigrationStrategy implements Migrate
 
         $prevMigrationVersion = \reset($versions);
 
-        $migrationClass = "\\App\\Migrations\\{$prevMigrationVersion}";
+        $migrationClass = implode(DIRECTORY_SEPARATOR, [$this->getMigrationNamespace(), $prevMigrationVersion]);
 
         /** @var Migration $migration */
         $migration = $this->getReflector()->initialize($migrationClass, [$this->getConnection()]);

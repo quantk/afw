@@ -23,6 +23,7 @@ final class MigrationStrategyFactory
      * @param Filesystem $filesystem
      * @param Reflector $reflector
      * @param String $migrationsPath
+     * @param string $migrationsNamespace
      * @return MigrateStrategyInterface
      */
     public function create(
@@ -30,15 +31,16 @@ final class MigrationStrategyFactory
         Connection $connection,
         Filesystem $filesystem,
         Reflector $reflector,
-        String $migrationsPath
+        string $migrationsPath,
+        string $migrationsNamespace
     ): MigrateStrategyInterface
     {
         if (Mode::NEXT_MODE === $mode->getMode()) {
-            return new NextMigrationStrategy($mode, $connection, $filesystem, $reflector, $migrationsPath);
+            return new NextMigrationStrategy($mode, $connection, $filesystem, $reflector, $migrationsPath, $migrationsNamespace);
         }
 
         if (Mode::PREV_MODE === $mode->getMode()) {
-            return new PrevMigrationStrategy($mode, $connection, $filesystem, $reflector, $migrationsPath);
+            return new PrevMigrationStrategy($mode, $connection, $filesystem, $reflector, $migrationsPath, $migrationsNamespace);
         }
 
         throw new \RuntimeException('invalid mode');

@@ -11,9 +11,6 @@ declare(strict_types=1);
 use Afw\Application;
 use Afw\Component\Container\ContainerBootstrap;
 
-
-require_once '../vendor/autoload.php';
-
 if (!isCli()) {
     $whoops = new \Whoops\Run;
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
