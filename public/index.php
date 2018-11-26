@@ -5,7 +5,6 @@ require_once '../vendor/autoload.php';
 
 try {
     /** @var \DI\Container $container */
-    $rootDir = './';
     $container = require_once '../src/bootstrap.php';
 
     /** @var \Afw\Application $app */
