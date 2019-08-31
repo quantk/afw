@@ -7,4 +7,5 @@ before_install:
 install:
   - composer install --no-interaction --prefer-source
 
-script: phpunit
+script:
+  - vendor/bin/phpunit --configuration ./phpunit.xml.dist
